@@ -21,7 +21,7 @@
        <layout class="QVBoxLayout" name="Canvas"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="Toggles"/>
+       <layout class="QHBoxLayout" name="Toggles"/>
       </item>
      </layout>
     </widget>

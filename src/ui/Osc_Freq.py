@@ -24,7 +24,7 @@ class Ui_Form(object):
         self.Canvas = QtWidgets.QVBoxLayout()
         self.Canvas.setObjectName("Canvas")
         self.verticalLayout.addLayout(self.Canvas)
-        self.Toggles = QtWidgets.QVBoxLayout()
+        self.Toggles = QtWidgets.QHBoxLayout()
         self.Toggles.setObjectName("Toggles")
         self.verticalLayout.addLayout(self.Toggles)
         self.horizontalLayout.addWidget(self.Full_Widg)
