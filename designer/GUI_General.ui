@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1193</width>
+    <height>906</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QFrame" name="FatherFrame">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QFrame" name="InputFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <layout class="QVBoxLayout" name="InputLayout">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QFrame" name="SignalSelectFrame">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QComboBox" name="SignalSelection">
+              <item>
+               <property name="text">
+                <string>Sine</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Exponential</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>AM</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="SignalLabel">
+              <property name="text">
+               <string>Text</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QFrame" name="ParameterSignalFrame">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QFrame" name="AmplitudFrame">
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item alignment="Qt::AlignRight">
+                <widget class="QLabel" name="AmpLabel">
+                 <property name="text">
+                  <string>Amplitud   </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="AmpSignal"/>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="AmpUnit">
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="FreqFrame">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item alignment="Qt::AlignRight">
+                <widget class="QLabel" name="FreqLabel">
+                 <property name="text">
+                  <string>Frequency</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="FreqSignal"/>
+               </item>
+               <item alignment="Qt::AlignLeft">
+                <widget class="QLabel" name="FreqUnit">
+                 <property name="text">
+                  <string>Hz</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="SampleFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <layout class="QVBoxLayout" name="SampleLayout">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QFrame" name="DutyFrame">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="DutyLabel">
+              <property name="text">
+               <string>Duty cycle</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="DutySample"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="DutyUnit">
+              <property name="text">
+               <string>%</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QFrame" name="FreqSampleFrame">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="SampFreqLabel">
+              <property name="text">
+               <string>Frequency</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="SampleFreq"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="SampFreqUnit">
+              <property name="text">
+               <string>Hz</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="GeneralSelectionFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <layout class="QVBoxLayout" name="GeneralSelectionLayout">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QFrame" name="PlotFrame">
+           <layout class="QHBoxLayout" name="PlotLayout">
+            <property name="spacing">
+             <number>50</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="OscBox">
+              <property name="text">
+               <string>Osciloscope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="SpecBox">
+              <property name="text">
+               <string>Spectrum</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="PlotButton">
+              <property name="text">
+               <string>Plot</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="SignalPathFrame">
+           <layout class="QHBoxLayout" name="SignalPathLayout">
+            <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QFrame" name="FAAFrame">
+              <layout class="QVBoxLayout" name="FAALayout">
+               <property name="spacing">
+                <number>15</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="FAALabel">
+                 <property name="text">
+                  <string>FAA</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="FAABox">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QFrame" name="SHFrame">
+              <layout class="QVBoxLayout" name="SHLayout">
+               <property name="spacing">
+                <number>15</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="SHLabel">
+                 <property name="text">
+                  <string>S&amp;H</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="SHBox">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QFrame" name="AnalogKeyFrame">
+              <layout class="QVBoxLayout" name="AnalogKeyLayout">
+               <property name="spacing">
+                <number>15</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="AnalogKayLabel">
+                 <property name="text">
+                  <string>Analog Key</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="AnalogKeyBox">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QFrame" name="FRFrame">
+              <layout class="QVBoxLayout" name="FRLayout">
+               <property name="spacing">
+                <number>15</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="FRLabel">
+                 <property name="text">
+                  <string>Restore Filter</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignHCenter">
+                <widget class="QCheckBox" name="FRBox">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
