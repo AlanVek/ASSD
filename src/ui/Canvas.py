@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer\Osc_Freq.ui'
+# Form implementation generated from reading ui file 'designer\Canvas.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -26,6 +26,9 @@ class Ui_Form(object):
         self.verticalLayout.addLayout(self.Canvas)
         self.Toggles = QtWidgets.QHBoxLayout()
         self.Toggles.setObjectName("Toggles")
+        self.Clear = QtWidgets.QPushButton(self.Full_Widg)
+        self.Clear.setObjectName("Clear")
+        self.Toggles.addWidget(self.Clear)
         self.verticalLayout.addLayout(self.Toggles)
         self.horizontalLayout.addWidget(self.Full_Widg)
 
@@ -35,6 +38,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.Clear.setText(_translate("Form", "Clear"))
 
 
 if __name__ == "__main__":
