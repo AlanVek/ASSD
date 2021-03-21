@@ -20,16 +20,24 @@ class Ui_Form(object):
         self.Full_Widg = QtWidgets.QFrame(Form)
         self.Full_Widg.setObjectName("Full_Widg")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.Full_Widg)
+        self.verticalLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.verticalLayout.setSpacing(25)
         self.verticalLayout.setObjectName("verticalLayout")
         self.Canvas = QtWidgets.QVBoxLayout()
         self.Canvas.setObjectName("Canvas")
         self.verticalLayout.addLayout(self.Canvas)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.LogCheck = QtWidgets.QCheckBox(self.Full_Widg)
+        self.LogCheck.setObjectName("LogCheck")
+        self.verticalLayout_2.addWidget(self.LogCheck, 0, QtCore.Qt.AlignHCenter)
         self.Toggles = QtWidgets.QHBoxLayout()
         self.Toggles.setObjectName("Toggles")
         self.Clear = QtWidgets.QPushButton(self.Full_Widg)
         self.Clear.setObjectName("Clear")
-        self.Toggles.addWidget(self.Clear)
-        self.verticalLayout.addLayout(self.Toggles)
+        self.Toggles.addWidget(self.Clear, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout_2.addLayout(self.Toggles)
+        self.verticalLayout.addLayout(self.verticalLayout_2)
         self.horizontalLayout.addWidget(self.Full_Widg)
 
         self.retranslateUi(Form)
@@ -38,6 +46,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.LogCheck.setText(_translate("Form", "Log Scale"))
         self.Clear.setText(_translate("Form", "Clear"))
 
 

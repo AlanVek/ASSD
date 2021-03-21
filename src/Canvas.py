@@ -35,6 +35,7 @@ class Canvas(QWidget, Ui_Form):
         self.Fcanvas.draw()
 
         self.Clear.clicked.connect(self.clear)
+        self.LogCheck.toggled.connect(self.new_scale)
 
         self.plots : list[Line2D] = []
         self.checks : list[QCheckBox] = []
@@ -78,3 +79,11 @@ class Canvas(QWidget, Ui_Form):
         self.ax.set_title(self.title)
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
+
+    def new_scale(self):
+        if self.LogCheck.isChecked():
+            self.ax.set_xscale('log')
+        else:
+            self.ax.set_xscale('linear')
+
+        self.Fcanvas.draw()

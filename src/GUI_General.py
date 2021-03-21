@@ -8,11 +8,15 @@ from scipy.fft import fft, fftfreq
 _EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
 _SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/2f]'
 _COSN_TEXT = '   A * cos(2π * f * t) ; [0, 2π]    '
+_AMMD_TEXT = '                 AM                 '
 
 _COS_IDX = 0
 _SIN_IDX = 1
 _EXP_IDX = 2
 _AMM_IDX = 3
+
+_CANT_PER = int(7e3)
+_MAX_DIF_F = 180
 
 class GUI(QWidget, GUI_Base):
     def __init__(self):
@@ -27,7 +31,7 @@ class GUI(QWidget, GUI_Base):
         self.n_plots = 0
 
         self.osc = Canvas(title = 'Oscilloscope', xlabel = 'Time [ms]', ylabel = 'mV')
-        self.spec = Canvas('Spectral Analyzer', xlabel = 'Frequency [kHz]')
+        self.spec = Canvas('Spectral Analyzer', xlabel = 'Frequency [kHz]', ylabel = 'dBm')
 
         self.connect_callback()
 
@@ -63,7 +67,6 @@ class GUI(QWidget, GUI_Base):
     def create_function(self):
 
         NPER = 6
-        print(self.SignalSelection.currentIndex())
 
         if self.SignalSelection.currentIndex() == _COS_IDX:
             realFreq = self.FreqSignal.value() * 1000
@@ -84,7 +87,7 @@ class GUI(QWidget, GUI_Base):
 
         else: return
 
-        self.x = np.linspace(0, NPER / realFreq, num=5000 * NPER)
+        self.x = np.linspace(0, NPER / realFreq, num=_CANT_PER * NPER)
         self.y = func(self.x)
 
     def new_circuit(self):
@@ -124,7 +127,7 @@ class GUI(QWidget, GUI_Base):
     def add_both(self, x, y, f, label : str):
         self.osc.add_plot(x * 1e3, y * 1e3, label, self.n_plots)
         pos_f = (f >= 0) & (f <= 10e3 * max(self.FreqSignal.value(), self.SampleFreq.value()))
-        self.spec.add_plot(f[pos_f] / 1e3, np.abs(fft(y))[pos_f], label, ID = self.n_plots)
+        self.spec.add_plot(f[pos_f] / 1e3, self.to_dBm(fft(y)[pos_f]), label, ID = self.n_plots)
 
     def keyPressEvent(self, a0) -> None:
         if a0.key() == Qt.Key_Escape: self.close()
@@ -132,7 +135,7 @@ class GUI(QWidget, GUI_Base):
 
     def new_expo(self, NPER):
         fi = self.FreqSignal.value() * 1e3
-        x_temp = np.linspace(-1/fi, 1/fi, num = 5000)
+        x_temp = np.linspace(-1/fi, 1/fi, num = _CANT_PER)
 
         y_temp = self.AmpSignal.value() / 1e3 * np.exp(-np.abs(5 * fi * x_temp))
 
@@ -140,7 +143,7 @@ class GUI(QWidget, GUI_Base):
 
     def new_sine(self, NPER):
         fi = self.FreqSignal.value() * 1e3
-        x_temp = np.linspace(0, 15 / (2 * fi), num = 5000)
+        x_temp = np.linspace(0, 15 / (2 * fi), num = _CANT_PER)
 
         y_temp = self.AmpSignal.value() / 1e3 * np.cos(2 * np.pi * x_temp * fi / 5)
 
@@ -166,10 +169,24 @@ class GUI(QWidget, GUI_Base):
 
     def adjust_freqs(self, which):
         if self.SampleFreq.value() > self.FreqSignal.value() * 250:
-            if which == 1: self.SampleFreq.setValue(self.FreqSignal.value() * 250)
+            if which == 1: self.SampleFreq.setValue(self.FreqSignal.value() * _MAX_DIF_F)
 
             else:
-                self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / 2.5) / 100)
+                self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / _MAX_DIF_F * 100) / 100)
 
     def adjust_duty(self):
         if self.DutySample.value() > 95: self.DutySample.setValue(95)
+
+    @staticmethod
+    def to_dBm(FFT):
+
+        MIN_NOISE = 1e-6
+        R_IN = 50
+
+        dBm = lambda v: 10 * np.log10(v**2 / R_IN)
+
+        FFT = np.abs(FFT)
+        lower_than_noise = FFT > MIN_NOISE
+        FFT[lower_than_noise] = dBm(FFT[lower_than_noise])
+        FFT[~lower_than_noise] = dBm(MIN_NOISE)
+        return FFT
