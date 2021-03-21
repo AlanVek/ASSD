@@ -6,8 +6,8 @@ from scipy.signal import square
 from scipy.fft import fft, fftfreq
 
 _EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
-_SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/(2f)]'
-_COSN_TEXT = 'A * cos(2π * f * t)'
+_SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/2f]'
+_COSN_TEXT = '   A * cos(2π * f * t) ; [0, 2π]    '
 
 _COS_IDX = 0
 _SIN_IDX = 1
@@ -51,6 +51,8 @@ class GUI(QWidget, GUI_Base):
 
         self.SampleFreq.valueChanged.connect(partial(self.adjust_freqs, 0))
         self.FreqSignal.valueChanged.connect(partial(self.adjust_freqs, 1))
+
+        self.DutySample.valueChanged.connect(self.adjust_duty)
 
     def toggle_box(self, position):
         if self.checkBox[position].isChecked():
@@ -144,13 +146,13 @@ class GUI(QWidget, GUI_Base):
         return 2 * fi / 15, np.tile(y_temp, NPER)
 
     def newText(self):
-        if self.SignalSelection.currentText() == 'Sine': self.SignalLabel.setText(_SINE_TEXT)
+        if self.SignalSelection.currentIndex() == _SIN_IDX: self.SignalLabel.setText(_SINE_TEXT)
 
-        elif self.SignalSelection.currentText() == 'Exponential': self.SignalLabel.setText(_EXPO_TEXT)
+        elif self.SignalSelection.currentIndex() == _EXP_IDX: self.SignalLabel.setText(_EXPO_TEXT)
 
-        elif self.SignalSelection.currentText() == 'AM': self.SignalLabel.setText('AM')
+        elif self.SignalSelection.currentIndex() == _AMM_IDX: self.SignalLabel.setText('AM')
 
-        elif self.SignalSelection.currentText() == 'Cosine': self.SignalLabel.setText(_COSN_TEXT)
+        elif self.SignalSelection.currentIndex() == _COS_IDX: self.SignalLabel.setText(_COSN_TEXT)
 
     def close(self):
         self.osc.close()
@@ -167,3 +169,6 @@ class GUI(QWidget, GUI_Base):
 
             else:
                 self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / 2.5) / 100)
+
+    def adjust_duty(self):
+        if self.DutySample.value() > 95: self.DutySample.setValue(95)
