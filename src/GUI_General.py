@@ -6,6 +6,15 @@ from src.Canvas import Canvas, Qt
 from scipy.signal import square
 from scipy.fft import fft, fftfreq
 
+_EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
+_SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/(2f)];'
+_COSN_TEXT = 'A * cos(2π * f * t)'
+
+_COS_IDX = 0
+_SIN_IDX = 1
+_EXP_IDX = 2
+_AMM_IDX = 3
+
 class GUI(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
@@ -18,10 +27,8 @@ class GUI(QWidget, Ui_Form):
         self.checkBox = [self.FAABox, self.SHBox, self.AnalogKeyBox, self.FRBox]
         self.n_plots = 0
 
-
-        self.FreqSignal.setValue(1)
-
-        self.osc, self.spec = Canvas(title = 'Oscilloscope', xlabel = 'Time [s]'), Canvas('Spectral Analyzer', xlabel = 'Frequency [Hz]')
+        self.osc = Canvas(title = 'Oscilloscope', xlabel = 'Time [ms]', ylabel = 'V')
+        self.spec = Canvas('Spectral Analyzer', xlabel = 'Frequency [kHz]')
 
         self.connect_callback()
 
@@ -39,7 +46,12 @@ class GUI(QWidget, Ui_Form):
         self.osc.closed.connect(lambda: self.OscBox.setChecked(False))
         self.spec.closed.connect(lambda: self.SpecBox.setChecked(False))
 
-        # self.osc.cleared.connect(lambda: self.n_osc_plots -= 0)
+        self.SignalSelection.currentIndexChanged.connect(self.newText)
+        self.Exit.clicked.connect(self.close)
+        self.ClearButton.clicked.connect(self.clearPlots)
+
+        self.SampleFreq.valueChanged.connect(partial(self.adjust_freqs, 0))
+        self.FreqSignal.valueChanged.connect(partial(self.adjust_freqs, 1))
 
     def toggle_box(self, position):
         if self.checkBox[position].isChecked():
@@ -48,23 +60,29 @@ class GUI(QWidget, Ui_Form):
             self.checkBox[position].setStyleSheet("background-color: gray;")
 
     def create_function(self):
-        if self.SignalSelection.currentText() == 'Sine':
-            realFreq = self.FreqSignal.value() / 5
-            func = lambda x: self.AmpSignal.value() * np.cos(2*np.pi*x*realFreq)
-            self.SignalLabel.setText('A*sin(2π*f*t/5)')
-        elif self.SignalSelection.currentText() == 'Exponential':
-            func = lambda x: self.AmpSignal.value() * np.exp(-np.abs(5*self.FreqSignal.value()* x))
-            self.SignalLabel.setText('A*exp(-|5*f*t|)')
-            realFreq = self.FreqSignal() / 2
-        elif self.SignalSelection.currentText() == 'AM':
-            func = lambda x: self.AmpSignal.value() * (0.5 * np.cos(3.6*np.pi*self.FreqSignal.value()*self.x)+np.cos(4*np.pi*self.FreqSignal.value()*self.x)+0.5*np.cos(4.4*np.pi*self.FreqSignal.value()*self.x))
-            self.SignalLabel.setText("AM")
-            realFreq = 5 / self.FreqSignal.value()
+
+        NPER = 6
+
+        if self.SignalSelection.currentIndex() == _COS_IDX:
+            realFreq = self.FreqSignal.value() * 1000
+            func = lambda x : self.AmpSignal.value() * np.cos(2 * np.pi * x * realFreq)
+
+        elif self.SignalSelection.currentIndex() == _SIN_IDX:
+            realFreq, self.y = self.new_sine(NPER)
+            func = lambda x: self.y
+
+        elif self.SignalSelection.currentText() == _EXP_IDX:
+            realFreq, self.y = self.new_expo(NPER)
+            func = lambda x: self.y
+
+        elif self.SignalSelection.currentText() == _AMM_IDX:
+            f = self.FreqSignal.value() * 1000
+            func = lambda x: self.AmpSignal.value() * (0.5 * np.cos(3.6*np.pi*f*self.x)+np.cos(4*np.pi*f*self.x)+0.5*np.cos(4.4*np.pi*f*self.x))
+            realFreq = 5 / f
 
         else: return
 
-        NPER = 6
-        self.x = np.linspace(0, max(NPER/realFreq, self.x.max() if self.x.size else 0), num = 5000 * NPER)
+        self.x = np.linspace(0, NPER / realFreq, num=5000 * NPER)
         self.y = func(self.x)
 
     def new_circuit(self):
@@ -72,13 +90,12 @@ class GUI(QWidget, Ui_Form):
         self.create_function()
         self.n_plots += 1
 
-        fs = self.SampleFreq.value()
+        fs = self.SampleFreq.value() * 1e3
         Th = 1 / fs
 
         timestep = (self.x.max() - self.x.min()) / (self.x.size - 1)
         freqs = fftfreq(self.x.size, d=timestep)
-        self.osc.add_plot(self.x, self.y, "Input")
-        self.spec.add_plot(freqs, abs(fft(self.y)), "Input")
+        self.add_both(self.x, self.y, freqs, "Input")
 
         # FAA
         if self.checkBox[0].isChecked():
@@ -100,11 +117,52 @@ class GUI(QWidget, Ui_Form):
         if self.checkBox[3].isChecked():
             pass
 
-
     def add_both(self, x, y, f, label : str):
-        self.osc.add_plot(x, y, label, self.n_plots)
-        self.spec.add_plot(f, abs(fft(y)), label, self.n_plots)
+        self.osc.add_plot(x * 1e3, y, label, self.n_plots)
+        pos_f = (f >= 0) & (f <= 10 * max(self.FreqSignal.value() * 1e3, self.SampleFreq.value() * 1e3))
+        self.spec.add_plot(f[pos_f] / 1e3, np.abs(fft(y))[pos_f], label, ID = self.n_plots)
 
     def keyPressEvent(self, a0) -> None:
         if a0.key() == Qt.Key_Escape: self.close()
         return super().keyPressEvent(a0)
+
+    def new_expo(self, NPER):
+        fi = self.FreqSignal.value() * 1e3
+        x_temp = np.linspace(-1/fi, 1/fi, num = 5000)
+
+        y_temp = self.AmpSignal.value() * np.exp(-np.abs(5 * fi * x_temp))
+
+        return fi/2, np.concatenate((y_temp[x_temp >= 0], np.tile(y_temp, NPER - 1), y_temp[x_temp < 0]))
+
+    def new_sine(self, NPER):
+        fi = self.FreqSignal.value() * 1e3
+        x_temp = np.linspace(0, 15 / (2 * fi), num = 5000)
+
+        y_temp = self.AmpSignal.value() * np.cos(2 * np.pi * x_temp * fi / 5)
+
+        return 2 * fi / 15, np.tile(y_temp, NPER)
+
+    def newText(self):
+        if self.SignalSelection.currentText() == 'Sine': self.SignalLabel.setText(_SINE_TEXT)
+
+        elif self.SignalSelection.currentText() == 'Exponential': self.SignalLabel.setText(_EXPO_TEXT)
+
+        elif self.SignalSelection.currentText() == 'AM': self.SignalLabel.setText('AM')
+
+        elif self.SignalSelection.currentText() == 'Cosine': self.SignalLabel.setText(_COSN_TEXT)
+
+    def close(self):
+        self.osc.close()
+        self.spec.close()
+        return QWidget.close(self)
+
+    def clearPlots(self):
+        self.osc.clear()
+        self.spec.clear()
+
+    def adjust_freqs(self, which):
+        if self.SampleFreq.value() > self.FreqSignal.value() * 250:
+            if which == 1: self.SampleFreq.setValue(self.FreqSignal.value() * 250)
+
+            else:
+                self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / 2.5) / 100)

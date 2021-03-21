@@ -12,7 +12,6 @@ from functools import partial
 class Canvas(QWidget, Ui_Form):
 
     closed = pyqtSignal()
-    cleared = pyqtSignal()
 
     def __init__(self, title = '', xlabel = '', ylabel = '', *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,21 +26,26 @@ class Canvas(QWidget, Ui_Form):
         self.Canvas.addWidget(NavigationToolbar(self.Fcanvas, self), alignment = Qt.AlignHCenter)
         self.Canvas.addWidget(self.Fcanvas)
         self.ax = self.figure.add_subplot(111)
-        self.ax.set_title(title)
-        self.ax.set_xlabel(xlabel)
-        self.ax.set_ylabel(ylabel)
+        self.title = title
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+
+        self.new_ax()
+
         self.Fcanvas.draw()
 
         self.Clear.clicked.connect(self.clear)
 
-
         self.plots : list[Line2D] = []
         self.checks : list[QCheckBox] = []
 
-    def add_plot(self, x, y, label = ' ', ID = None):
+    def add_plot(self, x, y, label = ' ', ID = None, scale = None):
         txt = label + (f' {ID}' if ID else '')
         self.plots.append(self.ax.plot(x, y, label = txt)[0])
         self.ax.legend()
+
+        if scale: self.ax.set_xscale(scale)
+
         self.checks.append(QCheckBox(txt))
         self.Toggles.addWidget(self.checks[-1], alignment = Qt.AlignHCenter)
         self.checks[-1].setChecked(True)
@@ -63,9 +67,14 @@ class Canvas(QWidget, Ui_Form):
         return super().closeEvent(a0)
 
     def clear(self):
-        self.cleared.emit()
-        self.ax.clear()
+        self.new_ax()
         self.plots.clear()
         for check in self.checks: self.Toggles.removeWidget(check)
         self.checks.clear()
         self.Fcanvas.draw()
+
+    def new_ax(self):
+        self.ax.clear()
+        self.ax.set_title(self.title)
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
