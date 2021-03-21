@@ -63,6 +63,7 @@ class GUI(QWidget, GUI_Base):
     def create_function(self):
 
         NPER = 6
+        print(self.SignalSelection.currentIndex())
 
         if self.SignalSelection.currentIndex() == _COS_IDX:
             realFreq = self.FreqSignal.value() * 1000
@@ -72,14 +73,14 @@ class GUI(QWidget, GUI_Base):
             realFreq, self.y = self.new_sine(NPER)
             func = lambda x: self.y
 
-        elif self.SignalSelection.currentText() == _EXP_IDX:
+        elif self.SignalSelection.currentIndex() == _EXP_IDX:
             realFreq, self.y = self.new_expo(NPER)
             func = lambda x: self.y
 
-        elif self.SignalSelection.currentText() == _AMM_IDX:
+        elif self.SignalSelection.currentIndex() == _AMM_IDX:
             f = self.FreqSignal.value() * 1000
-            func = lambda x: self.AmpSignal.value() / 1e3 * (0.5 * np.cos(3.6*np.pi*f*self.x)+np.cos(4*np.pi*f*self.x)+0.5*np.cos(4.4*np.pi*f*self.x))
-            realFreq = 5 / f
+            func = lambda x: self.AmpSignal.value() / 1e3 * (0.5 * np.cos(3.6*np.pi*f*x)+np.cos(4*np.pi*f*x)+0.5*np.cos(4.4*np.pi*f*x))
+            realFreq = f / 5
 
         else: return
 

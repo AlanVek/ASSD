@@ -39,6 +39,7 @@ class GUI_Base(object):
         self.SignalSelection.addItem("")
         self.SignalSelection.addItem("")
         self.SignalSelection.addItem("")
+        self.SignalSelection.addItem("")
         self.SignalSelection.setEditable(True)
         self.SignalSelection.lineEdit().setReadOnly(True)
         self.verticalLayout_3.addWidget(self.SignalSelection)
