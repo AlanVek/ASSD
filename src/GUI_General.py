@@ -1,13 +1,12 @@
-from PyQt5.QtWidgets import QWidget
-from src.ui.GUI_General import Ui_Form
+from src.ui.GUI_General import GUI_Base
 import numpy as np
 from functools import partial
-from src.Canvas import Canvas, Qt
+from src.Canvas import Canvas, Qt, QWidget
 from scipy.signal import square
 from scipy.fft import fft, fftfreq
 
 _EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
-_SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/(2f)];'
+_SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/(2f)]'
 _COSN_TEXT = 'A * cos(2π * f * t)'
 
 _COS_IDX = 0
@@ -15,7 +14,7 @@ _SIN_IDX = 1
 _EXP_IDX = 2
 _AMM_IDX = 3
 
-class GUI(QWidget, Ui_Form):
+class GUI(QWidget, GUI_Base):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -27,7 +26,7 @@ class GUI(QWidget, Ui_Form):
         self.checkBox = [self.FAABox, self.SHBox, self.AnalogKeyBox, self.FRBox]
         self.n_plots = 0
 
-        self.osc = Canvas(title = 'Oscilloscope', xlabel = 'Time [ms]', ylabel = 'V')
+        self.osc = Canvas(title = 'Oscilloscope', xlabel = 'Time [ms]', ylabel = 'mV')
         self.spec = Canvas('Spectral Analyzer', xlabel = 'Frequency [kHz]')
 
         self.connect_callback()
@@ -65,7 +64,7 @@ class GUI(QWidget, Ui_Form):
 
         if self.SignalSelection.currentIndex() == _COS_IDX:
             realFreq = self.FreqSignal.value() * 1000
-            func = lambda x : self.AmpSignal.value() * np.cos(2 * np.pi * x * realFreq)
+            func = lambda x : self.AmpSignal.value() / 1e3 * np.cos(2 * np.pi * x * realFreq)
 
         elif self.SignalSelection.currentIndex() == _SIN_IDX:
             realFreq, self.y = self.new_sine(NPER)
@@ -77,7 +76,7 @@ class GUI(QWidget, Ui_Form):
 
         elif self.SignalSelection.currentText() == _AMM_IDX:
             f = self.FreqSignal.value() * 1000
-            func = lambda x: self.AmpSignal.value() * (0.5 * np.cos(3.6*np.pi*f*self.x)+np.cos(4*np.pi*f*self.x)+0.5*np.cos(4.4*np.pi*f*self.x))
+            func = lambda x: self.AmpSignal.value() / 1e3 * (0.5 * np.cos(3.6*np.pi*f*self.x)+np.cos(4*np.pi*f*self.x)+0.5*np.cos(4.4*np.pi*f*self.x))
             realFreq = 5 / f
 
         else: return
@@ -100,11 +99,13 @@ class GUI(QWidget, Ui_Form):
         # FAA
         if self.checkBox[0].isChecked():
             pass
+
         # S&H
         if self.checkBox[1].isChecked():
             jump = max(1, int(np.round(Th / timestep, 0)))
             self.y = np.repeat(self.y[::jump], jump)[: self.y.size]
-            if self.y.size < self.x.size: self.y = np.append(self.y, np.full(self.x.size - self.y.size, self.y[-1]))
+            if self.y.size < self.x.size:
+                self.y = np.append(self.y, np.full(self.x.size - self.y.size, self.y[-1]))
 
             self.add_both(self.x, self.y, freqs, "Hold")
 
@@ -118,8 +119,8 @@ class GUI(QWidget, Ui_Form):
             pass
 
     def add_both(self, x, y, f, label : str):
-        self.osc.add_plot(x * 1e3, y, label, self.n_plots)
-        pos_f = (f >= 0) & (f <= 10 * max(self.FreqSignal.value() * 1e3, self.SampleFreq.value() * 1e3))
+        self.osc.add_plot(x * 1e3, y * 1e3, label, self.n_plots)
+        pos_f = (f >= 0) & (f <= 10e3 * max(self.FreqSignal.value(), self.SampleFreq.value()))
         self.spec.add_plot(f[pos_f] / 1e3, np.abs(fft(y))[pos_f], label, ID = self.n_plots)
 
     def keyPressEvent(self, a0) -> None:
@@ -130,7 +131,7 @@ class GUI(QWidget, Ui_Form):
         fi = self.FreqSignal.value() * 1e3
         x_temp = np.linspace(-1/fi, 1/fi, num = 5000)
 
-        y_temp = self.AmpSignal.value() * np.exp(-np.abs(5 * fi * x_temp))
+        y_temp = self.AmpSignal.value() / 1e3 * np.exp(-np.abs(5 * fi * x_temp))
 
         return fi/2, np.concatenate((y_temp[x_temp >= 0], np.tile(y_temp, NPER - 1), y_temp[x_temp < 0]))
 
@@ -138,7 +139,7 @@ class GUI(QWidget, Ui_Form):
         fi = self.FreqSignal.value() * 1e3
         x_temp = np.linspace(0, 15 / (2 * fi), num = 5000)
 
-        y_temp = self.AmpSignal.value() * np.cos(2 * np.pi * x_temp * fi / 5)
+        y_temp = self.AmpSignal.value() / 1e3 * np.cos(2 * np.pi * x_temp * fi / 5)
 
         return 2 * fi / 15, np.tile(y_temp, NPER)
 
