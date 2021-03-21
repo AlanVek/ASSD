@@ -96,7 +96,7 @@ class GUI(QWidget, GUI_Base):
         self.n_plots += 1
 
         fs = self.SampleFreq.value() * 1e3
-        Th = 1 / fs
+        Th = min(1 / fs, 1/self.FreqSignal.value() / 2e3)
 
         timestep = (self.x.max() - self.x.min()) / (self.x.size - 1)
         freqs = fftfreq(self.x.size, d=timestep)
@@ -180,7 +180,7 @@ class GUI(QWidget, GUI_Base):
     @staticmethod
     def to_dBm(FFT):
 
-        MIN_NOISE = 1e-6
+        MIN_NOISE = 1e-5
         R_IN = 50
 
         dBm = lambda v: 10 * np.log10(v**2 / R_IN)
