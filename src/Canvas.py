@@ -7,11 +7,11 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QCheckBox
 
 from src.ui.Canvas import Ui_Form
-from functools import partial
+# from functools import partial
 
 class Canvas(QWidget, Ui_Form):
 
-    closed = pyqtSignal()
+    closed = pyqtSignal(bool)
 
     def __init__(self, title = '', xlabel = '', ylabel = '', *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,21 +50,24 @@ class Canvas(QWidget, Ui_Form):
         self.checks.append(QCheckBox(txt))
         self.Toggles.addWidget(self.checks[-1], alignment = Qt.AlignHCenter)
         self.checks[-1].setChecked(True)
-        self.checks[-1].toggled.connect(partial(self.toggle_plot, len(self.checks) - 1))
+        # self.checks[-1].toggled.connect(partial(self.toggle_plot, len(self.checks) - 1))
+        self.checks[-1].toggled.connect(self.plots[-1].set_visible)
+        self.checks[-1].toggled.connect(self.Fcanvas.draw)
+
         self.Fcanvas.draw()
         self.checks[-1].setStyleSheet(f'color: {self.plots[-1].get_color()}; font-weight: bold')
 
-    def toggle_plot(self, number):
-        self.plots[number].set_visible(self.checks[number].isChecked())
+    # def toggle_plot(self, number):
+    #     self.plots[number].set_visible(self.checks[number].isChecked())
         # self.plots[number].set_visible(self.checks[number].isChecked())
-        self.Fcanvas.draw()
+        # self.Fcanvas.draw()
 
     def keyPressEvent(self, a0) -> None:
         if a0.key() == Qt.Key_Escape: self.close()
         else: return super().keyPressEvent(a0)
 
     def closeEvent(self, a0) -> None:
-        self.closed.emit()
+        self.closed.emit(False)
         return super().closeEvent(a0)
 
     def clear(self):
@@ -79,6 +82,7 @@ class Canvas(QWidget, Ui_Form):
         self.ax.set_title(self.title)
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
+        self.ax.grid()
 
     def new_scale(self):
         if self.LogCheck.isChecked():

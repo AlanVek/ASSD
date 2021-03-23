@@ -1,21 +1,21 @@
-from src.ui.GUI_General import GUI_Base
+from src.ui.GUI_General import GUI_Base, QtGui
 import numpy as np
 from functools import partial
-from src.Canvas import Canvas, Qt, QWidget
+from src.Canvas import Canvas, Qt, QWidget, QCheckBox
 from scipy.signal import square
 from scipy.fft import fft, fftfreq
 
 _EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
 _SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/2f]'
 _COSN_TEXT = '   A * cos(2π * f * t) ; [0, 2π]    '
-_AMMD_TEXT = '                 AM                 '
+_AMMD_TEXT = '                AM                  '
 
 _COS_IDX = 0
 _SIN_IDX = 1
 _EXP_IDX = 2
 _AMM_IDX = 3
 
-_CANT_PER = int(7e3)
+_CANT_PER = 7000
 _MAX_DIF_F = 180
 
 class GUI(QWidget, GUI_Base):
@@ -23,17 +23,18 @@ class GUI(QWidget, GUI_Base):
         super().__init__()
         self.setupUi(self)
 
-
-        #Variabes
         self.y = np.array([])
         self.x = np.array([])
-        self.checkBox = [self.FAABox, self.SHBox, self.AnalogKeyBox, self.FRBox]
+        self.checkBox : list[QCheckBox] = [self.FAABox, self.SHBox, self.AnalogKeyBox, self.FRBox]
         self.n_plots = 0
 
         self.osc = Canvas(title = 'Oscilloscope', xlabel = 'Time [ms]', ylabel = 'mV')
         self.spec = Canvas('Spectral Analyzer', xlabel = 'Frequency [kHz]', ylabel = 'dBm')
 
         self.connect_callback()
+        self.repaint()
+
+        self.iniStyle = self.checkBox[0].styleSheet()
 
 
     def connect_callback(self):
@@ -43,11 +44,11 @@ class GUI(QWidget, GUI_Base):
 
         self.PlotButton.clicked.connect(self.new_circuit)
 
-        self.OscBox.toggled.connect(lambda: self.osc.setVisible(self.OscBox.isChecked()))
-        self.SpecBox.toggled.connect(lambda: self.spec.setVisible(self.SpecBox.isChecked()))
+        self.OscBox.toggled.connect(self.osc.setVisible)
+        self.SpecBox.toggled.connect(self.spec.setVisible)
 
-        self.osc.closed.connect(lambda: self.OscBox.setChecked(False))
-        self.spec.closed.connect(lambda: self.SpecBox.setChecked(False))
+        self.osc.closed.connect(self.OscBox.setChecked)
+        self.spec.closed.connect(self.SpecBox.setChecked)
 
         self.SignalSelection.currentIndexChanged.connect(self.newText)
         self.Exit.clicked.connect(self.close)
@@ -62,7 +63,7 @@ class GUI(QWidget, GUI_Base):
         if self.checkBox[position].isChecked():
             self.checkBox[position].setStyleSheet("background-color: blue; border: 1px solid black;")
         else:
-            self.checkBox[position].setStyleSheet("background-color: gray;")
+            self.checkBox[position].setStyleSheet(self.iniStyle)
 
     def create_function(self):
 
@@ -154,7 +155,7 @@ class GUI(QWidget, GUI_Base):
 
         elif self.SignalSelection.currentIndex() == _EXP_IDX: self.SignalLabel.setText(_EXPO_TEXT)
 
-        elif self.SignalSelection.currentIndex() == _AMM_IDX: self.SignalLabel.setText('AM')
+        elif self.SignalSelection.currentIndex() == _AMM_IDX: self.SignalLabel.setText(_AMMD_TEXT)
 
         elif self.SignalSelection.currentIndex() == _COS_IDX: self.SignalLabel.setText(_COSN_TEXT)
 
@@ -175,7 +176,7 @@ class GUI(QWidget, GUI_Base):
                 self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / _MAX_DIF_F * 100) / 100)
 
     def adjust_duty(self):
-        if self.DutySample.value() > 95: self.DutySample.setValue(95)
+        self.DutySample.setValue(max(95, self.DutySample.value()))
 
     @staticmethod
     def to_dBm(FFT):
@@ -186,7 +187,31 @@ class GUI(QWidget, GUI_Base):
         dBm = lambda v: 10 * np.log10(v**2 / R_IN)
 
         FFT = np.abs(FFT)
-        lower_than_noise = FFT > MIN_NOISE
-        FFT[lower_than_noise] = dBm(FFT[lower_than_noise])
-        FFT[~lower_than_noise] = dBm(MIN_NOISE)
+        greater_than_noise = FFT >= MIN_NOISE
+        FFT[greater_than_noise] = dBm(FFT[greater_than_noise])
+        FFT[~greater_than_noise] = dBm(MIN_NOISE)
         return FFT
+
+    def paintEvent(self, a0) -> None:
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0), 3))
+
+
+        absPos = lambda check: check.pos() + check.parent().pos() + self.SignalPathFrame.pos() + self.GeneralSelectionFrame.pos() + self.FatherFrame.pos()
+
+        wCheck = self.checkBox[0].width()
+        hCheck = self.checkBox[0].height()
+        wArr = hArr = hCheck / 2
+        for i, check in enumerate(self.checkBox):
+            if i != len(self.checkBox) - 1:
+                posi = absPos(check)
+                xi = posi.x() + 3 * wCheck
+                yi = posi.y() + hCheck / 2
+                xf = absPos(self.checkBox[i + 1]).x() - 2 * wCheck
+
+                painter.drawLine(xi, yi, xf, yi)
+                painter.drawLine(xf - wArr, yi - hArr, xf, yi)
+                painter.drawLine(xf - wArr, yi + hArr, xf, yi)
+
+        painter.end()
