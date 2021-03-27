@@ -132,7 +132,7 @@ class GUI_Base(object):
         self.horizontalLayout_5.addWidget(self.SampFreqLabel)
         self.SampleFreq = QtWidgets.QDoubleSpinBox(self.FreqSampleFrame)
         self.SampleFreq.setMinimum(.01)
-        self.SampleFreq.setMaximum(100)
+        self.SampleFreq.setMaximum(999.99)
         self.SampleFreq.setSingleStep(.01)
         self.SampleFreq.setObjectName("SampleFreq")
         self.SampleFreq.setAlignment(QtCore.Qt.AlignHCenter)

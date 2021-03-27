@@ -3,7 +3,7 @@ import numpy as np
 from functools import partial
 from src.Canvas import Canvas, Qt, QWidget, QCheckBox
 from scipy.signal import square
-from scipy.fft import fft, fftfreq
+from scipy.fft import fft, fftfreq, ifft
 
 _EXPO_TEXT = 'A * exp(- |5 * f * t|) ; [-1/f, 1/f]'
 _SINE_TEXT = 'A * sin(2π * f * t / 5) ; [0, 15/2f]'
@@ -36,6 +36,16 @@ class GUI(QWidget, GUI_Base):
 
         self.iniStyle = self.checkBox[0].styleSheet()
 
+        # self.tf_s = lambda s: 1.71358972e+36 / (
+        #             1.00000000e+00 * s ** 7 + 2.49631794e+05 * s ** 6 + 1.31958016e+11 * s ** 5 + 2.27862963e+16 * s ** 4 + 4.96508499e+21 * s ** 3 + 5.16926822e+26 * s ** 2 + 4.69945731e+31 * s + 1.71358972e+36)
+        # self.tf_f = lambda f: self.tf_s(2 * np.pi * f * 1j)
+
+        self.num = np.poly1d([1.71358972e+36])
+        self.denom = np.poly1d([1.00000000e+00, 2.49631794e+05, 1.31958016e+11, 2.27862963e+16, 4.96508499e+21, 5.16926822e+26, 4.69945731e+31, 1.71358972e+36])
+
+        # self.filter = TransferFunction(self.num, self.denom)
+
+        self.filter = lambda f: self.num(2j * np.pi * f) / self.denom(2j * np.pi * f)
 
     def connect_callback(self):
 
@@ -105,7 +115,11 @@ class GUI(QWidget, GUI_Base):
 
         # FAA
         if self.checkBox[0].isChecked():
-            pass
+
+            y_f = self.filter(freqs) * fft(self.y)
+            self.y = np.real(ifft(y_f, n = self.x.size))
+
+            self.add_both(self.x, self.y, freqs, "FAA")
 
         # S&H
         if self.checkBox[1].isChecked():
@@ -123,7 +137,10 @@ class GUI(QWidget, GUI_Base):
             self.add_both(self.x, self.y, freqs, "Switch")
 
         if self.checkBox[3].isChecked():
-            pass
+            y_f = self.filter(freqs) * fft(self.y)
+            self.y = np.real(ifft(y_f, n=self.x.size))
+
+            self.add_both(self.x, self.y, freqs, "FR")
 
     def add_both(self, x, y, f, label : str):
         self.osc.add_plot(x * 1e3, y * 1e3, label, self.n_plots)
@@ -176,7 +193,7 @@ class GUI(QWidget, GUI_Base):
                 self.FreqSignal.setValue(np.ceil(self.SampleFreq.value() / _MAX_DIF_F * 100) / 100)
 
     def adjust_duty(self):
-        self.DutySample.setValue(max(95, self.DutySample.value()))
+        if self.DutySample.value() > 95: self.DutySample.setValue(95)
 
     @staticmethod
     def to_dBm(FFT):
