@@ -36,14 +36,8 @@ class GUI(QWidget, GUI_Base):
 
         self.iniStyle = self.checkBox[0].styleSheet()
 
-        # self.tf_s = lambda s: 1.71358972e+36 / (
-        #             1.00000000e+00 * s ** 7 + 2.49631794e+05 * s ** 6 + 1.31958016e+11 * s ** 5 + 2.27862963e+16 * s ** 4 + 4.96508499e+21 * s ** 3 + 5.16926822e+26 * s ** 2 + 4.69945731e+31 * s + 1.71358972e+36)
-        # self.tf_f = lambda f: self.tf_s(2 * np.pi * f * 1j)
-
         self.num = np.poly1d([1.71358972e+36])
         self.denom = np.poly1d([1.00000000e+00, 2.49631794e+05, 1.31958016e+11, 2.27862963e+16, 4.96508499e+21, 5.16926822e+26, 4.69945731e+31, 1.71358972e+36])
-
-        # self.filter = TransferFunction(self.num, self.denom)
 
         self.filter = lambda f: self.num(2j * np.pi * f) / self.denom(2j * np.pi * f)
 
@@ -163,7 +157,7 @@ class GUI(QWidget, GUI_Base):
         fi = self.FreqSignal.value() * 1e3
         x_temp = np.linspace(0, 15 / (2 * fi), num = _CANT_PER)
 
-        y_temp = self.AmpSignal.value() / 1e3 * np.cos(2 * np.pi * x_temp * fi / 5)
+        y_temp = self.AmpSignal.value() / 1e3 * np.sin(2 * np.pi * x_temp * fi / 5)
 
         return 2 * fi / 15, np.tile(y_temp, NPER)
 

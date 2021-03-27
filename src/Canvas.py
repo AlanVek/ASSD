@@ -7,7 +7,6 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QCheckBox
 
 from src.ui.Canvas import Ui_Form
-# from functools import partial
 
 class Canvas(QWidget, Ui_Form):
 
@@ -83,6 +82,7 @@ class Canvas(QWidget, Ui_Form):
         self.ax.set_xlabel(self.xlabel)
         self.ax.set_ylabel(self.ylabel)
         self.ax.grid()
+        self.new_scale()
 
     def new_scale(self):
         if self.LogCheck.isChecked():
