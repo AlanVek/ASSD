@@ -139,6 +139,7 @@ class GUI(QWidget, GUI_Base):
     def add_both(self, x, y, f, label : str):
         self.osc.add_plot(x * 1e3, y * 1e3, label, self.n_plots)
         pos_f = (f >= 0) & (f <= 10e3 * max(self.FreqSignal.value(), self.SampleFreq.value()))
+
         self.spec.add_plot(f[pos_f] / 1e3, self.to_dBm(fft(y)[pos_f]), label, ID = self.n_plots)
 
     def keyPressEvent(self, a0) -> None:
@@ -178,6 +179,7 @@ class GUI(QWidget, GUI_Base):
     def clearPlots(self):
         self.osc.clear()
         self.spec.clear()
+        self.n_plots = 0
 
     def adjust_freqs(self, which):
         if self.SampleFreq.value() > self.FreqSignal.value() * 250:
