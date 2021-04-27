@@ -15,7 +15,7 @@ _SIN_IDX = 1
 _EXP_IDX = 2
 _AMM_IDX = 3
 
-_CANT_PER = 7000
+_CANT_PER = 2**12
 _MAX_DIF_F = 180
 
 class GUI(QWidget, GUI_Base):
@@ -71,7 +71,7 @@ class GUI(QWidget, GUI_Base):
 
     def create_function(self):
 
-        NPER = 6
+        NPER = 8
 
         if self.SignalSelection.currentIndex() == _COS_IDX:
             realFreq = self.FreqSignal.value() * 1000
