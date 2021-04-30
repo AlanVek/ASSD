@@ -71,10 +71,9 @@ class GUI(QWidget, Ui_Form):
 
     def _synth(self):
 
-        used, tot = [], 0
+        used, tot, curr = [], 0, 0
         for track in self.track_tracker:
             if track.isChecked(): tot += 1
-        curr = 0
         self.progress.setValue(0)
 
         if tot:
@@ -93,8 +92,11 @@ class GUI(QWidget, Ui_Form):
                     self.progress.setValue(int(curr / tot * 100))
 
             for pos, i in enumerate(used):
+                if not pos: self.sound = self.sound[ : self.instruments[i].sound.size]
+
                 if self.sound.size < self.instruments[i].sound.size:
                     self.sound = np.append(self.sound, np.zeros(self.instruments[i].sound.size - self.sound.size))
+
                 if pos: self.sound[ : self.instruments[i].sound.size] += self.instruments[i].sound
                 else: self.sound[ : self.instruments[i].sound.size] = self.instruments[i].sound
 
