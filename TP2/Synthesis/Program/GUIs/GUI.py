@@ -38,6 +38,7 @@ class GUI(QWidget, Ui_Form):
 
         self.scroller.setFixedWidth(250)
         self.sound = np.array([])
+        self.stop = False
 
     def get_file(self):
         self.Synth_Button.setEnabled(False)
@@ -91,6 +92,10 @@ class GUI(QWidget, Ui_Form):
                     curr += 1
                     self.progress.setValue(int(curr / tot * 100))
 
+                    if self.stop:
+                        self.stop = False
+                        break
+
             for pos, i in enumerate(used):
                 if not pos: self.sound = self.sound[ : self.instruments[i].sound.size]
 
@@ -112,6 +117,8 @@ class GUI(QWidget, Ui_Form):
 
     def close(self):
         self.player.close()
+        self.stop = True
+        if self.th.is_alive(): self.th.join()
         return super().close()
 
 

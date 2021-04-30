@@ -48,7 +48,7 @@ class Instrument:
         
         # Itera por cada evento en el track
         for i, ev in enumerate(self.track):
-            
+
             # Carga los valores de tiempo (real y ticks)
             real_time += ev.time * self.current_timestep(point)
             point += ev.time
@@ -77,17 +77,18 @@ class Instrument:
         
         # Genera la nota y normaliza su amplitud
         nt = self._gen_note(freq = fnote * 2**max(0, octave-lowtone), dur = duration, **kwargs)
-        nt *= velocity / np.abs(nt).max() * octave
+        if np.count_nonzero(nt):
+            nt *= velocity / np.abs(nt).max() * octave
         
-        # Busca el índice en el que empieza la nota
-        idx = int(np.round((self.fs * real_time), 0))
+            # Busca el índice en el que empieza la nota
+            idx = int(np.round((self.fs * real_time), 0))
 
-        # Agrega puntos en caso de sobrar por redondeos
-        if idx + nt.size > self.sound.size:
-            self.sound = np.append(self.sound, np.zeros(idx + nt.size - self.sound.size))
+            # Agrega puntos en caso de sobrar por redondeos
+            if idx + nt.size > self.sound.size:
+                self.sound = np.append(self.sound, np.zeros(idx + nt.size - self.sound.size))
                     
-        # Agrega la nota
-        self.sound[idx : idx + nt.size] += nt
+            # Agrega la nota
+            self.sound[idx : idx + nt.size] += nt
     
     # Busca cuándo termina una nota
     # note: La nota que debe terminar

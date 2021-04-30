@@ -4,7 +4,8 @@ def Karplus_Strong(freq : float, dur : float, fs : float, S : float, b) -> np.ar
     N = int(np.round(fs/freq - 1/(2 * S), 0))
     samples = np.zeros(int(np.round(fs * dur, 0)))
 
-    samples[ : N] = (2 * np.random.randint(0, 2, N) - 1).astype(float)
+    try: samples[ : N] = (2 * np.random.randint(0, 2, N) - 1).astype(float)
+    except ValueError: return samples
     k = np.zeros(N)
     r = np.random.binomial(1, 1 / S, samples.size).astype(bool)
 
