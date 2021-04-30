@@ -6,7 +6,7 @@ class KSInstrument(Instrument):
 
     def _gen_note(self, freq, dur, **kwargs):
         if 'stretch_lim' in kwargs: self.stretch_lim = kwargs.pop('stretch_lim')
-        else: self.stretch_lim = 500
+        else: self.stretch_lim = 400
         return Karplus_Strong(freq, fs = self.fs, dur = dur, b = self.b, S = max(1, freq/self.stretch_lim))
     
 # Clase guitarra, hereda de KSInstrument. Sobreescribe a _gen_note con b = 1

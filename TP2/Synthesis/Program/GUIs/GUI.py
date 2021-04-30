@@ -8,12 +8,14 @@ from Instruments.Karplus_Strong.KSInstrument import Guitar, Drum, Harp
 import numpy as np
 from threading import Thread
 from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal
 
 
 class GUI(QWidget, Ui_Form):
 
     instrument_names = ['Guitar', 'Harp', 'Drum']
     instruments = [Guitar(), Harp(), Drum()]
+    new_synth = pyqtSignal('int')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,6 +41,8 @@ class GUI(QWidget, Ui_Form):
         self.scroller.setFixedWidth(250)
         self.sound = np.array([])
         self.stop = False
+
+        self.new_synth.connect(self.progress.setValue)
 
     def get_file(self):
         self.Synth_Button.setEnabled(False)
@@ -75,7 +79,7 @@ class GUI(QWidget, Ui_Form):
         used, tot, curr = [], 0, 0
         for track in self.track_tracker:
             if track.isChecked(): tot += 1
-        self.progress.setValue(0)
+        self.new_synth.emit(0)
 
         if tot:
             for i, track in enumerate(self.track_tracker):
@@ -90,7 +94,7 @@ class GUI(QWidget, Ui_Form):
                         self.instruments[index].synthesize(fs = 48000, track = i)
                         used.append(index)
                     curr += 1
-                    self.progress.setValue(int(curr / tot * 100))
+                    self.new_synth.emit(int(curr / tot * 100))
 
                     if self.stop:
                         self.stop = False
