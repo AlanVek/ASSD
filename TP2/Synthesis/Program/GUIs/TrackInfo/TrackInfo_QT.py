@@ -15,8 +15,8 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(400, 300)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.hiddenLayout = QtWidgets.QVBoxLayout(Form)
+        self.hiddenLayout.setObjectName("hiddenLayout")
         self.Full_Frame = QtWidgets.QFrame(Form)
         self.Full_Frame.setObjectName("Full_Frame")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.Full_Frame)
@@ -28,7 +28,7 @@ class Ui_Form(object):
         self.Instrument_Options = QtWidgets.QComboBox(self.Full_Frame)
         self.Instrument_Options.setObjectName("Instrument_Options")
         self.verticalLayout.addWidget(self.Instrument_Options)
-        self.verticalLayout_2.addWidget(self.Full_Frame, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.hiddenLayout.addWidget(self.Full_Frame, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

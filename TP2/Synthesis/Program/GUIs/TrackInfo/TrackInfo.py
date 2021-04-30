@@ -12,17 +12,15 @@ class TrackInfo(QWidget, Ui_Form):
         self.options = options
 
         self.Track_Label.setText('Track ' + str(self.number))
-
-        for option in self.options:
-            self.Instrument_Options.addItem(option)
+        self.Instrument_Options.addItems(self.options)
 
     def current_option(self):
         return self.Instrument_Options.currentText()
 
     def delete(self):
-        self.verticalLayout_2.removeWidget(self.Track_Label)
-        self.verticalLayout_2.removeWidget(self.Instrument_Options)
-        self.verticalLayout_2.removeWidget(self.Full_Frame)
+        self.hiddenLayout.removeWidget(self.Track_Label)
+        self.hiddenLayout.removeWidget(self.Instrument_Options)
+        self.hiddenLayout.removeWidget(self.Full_Frame)
 
         self.Track_Label.deleteLater()
         self.Instrument_Options.deleteLater()

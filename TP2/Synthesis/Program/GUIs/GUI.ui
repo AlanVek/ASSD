@@ -15,25 +15,59 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QVBoxLayout" name="Full_Layout">
+    <layout class="QHBoxLayout" name="Full_Layout">
      <item>
-      <widget class="QPushButton" name="File_Button">
-       <property name="text">
-        <string>New File</string>
+      <widget class="QScrollArea" name="scroller">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>293</width>
+          <height>278</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QVBoxLayout" name="track_layout"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="track_layout"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="Synth_Button">
-       <property name="text">
-        <string>Synthesize</string>
+     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+      <widget class="QFrame" name="GUI_Frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
+       <layout class="QVBoxLayout" name="Buttons_Layout">
+        <item>
+         <widget class="QPushButton" name="File_Button">
+          <property name="text">
+           <string>New File</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Synth_Button">
+          <property name="text">
+           <string>Synthesize</string>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

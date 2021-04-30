@@ -7,7 +7,7 @@ from GUIs.TrackInfo.TrackInfo import TrackInfo
 from Instruments.Karplus_Strong.KSInstrument import Guitar, Drum, Harp
 import numpy as np
 from threading import Thread
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 
 
 class GUI(QWidget, Ui_Form):
@@ -26,10 +26,12 @@ class GUI(QWidget, Ui_Form):
         self.track_tracker : list[TrackInfo] = []
 
         self.newlay = QVBoxLayout()
-        self.player = Player(self)
+        self.player = Player(self.GUI_Frame)
         self.newlay.addWidget(self.player, 0, Qt.AlignHCenter)
-        self.Full_Layout.addLayout(self.newlay)
+        self.Buttons_Layout.addLayout(self.newlay)
         self.th = Thread(target = self._synth)
+
+        self.scroller.setFixedWidth(250)
 
     def get_file(self):
         self.Synth_Button.setEnabled(False)
@@ -80,7 +82,6 @@ class GUI(QWidget, Ui_Form):
 
                     self.sound[ : self.instruments[i].sound.size] += self.instruments[i].sound
 
-            print(self.sound.size)
             self.player.load(self.sound, 48000)
             print('Synthesized')
 
