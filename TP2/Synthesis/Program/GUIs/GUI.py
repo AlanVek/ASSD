@@ -64,15 +64,16 @@ class GUI(QWidget, Ui_Form):
             used = []
 
             for i, track in enumerate(self.track_tracker):
-                index = self.instrument_names.index(track.current_option())
-                print(f'Synthesizing track {i+1} of {len(self.track_tracker)} with: {self.instrument_names[index]}')
+                if track.isChecked():
+                    index = self.instrument_names.index(track.current_option())
+                    print(f'Synthesizing track {i+1} of {len(self.track_tracker)} with: {self.instrument_names[index]}')
 
-                if index in used:
-                    self.instruments[index].synthesize(fs = 48000, track = i, add = True)
-                else:
-                    self.instruments[index].load(self.file)
-                    self.instruments[index].synthesize(fs = 48000, track = i)
-                    used.append(index)
+                    if index in used:
+                        self.instruments[index].synthesize(fs = 48000, track = i, add = True)
+                    else:
+                        self.instruments[index].load(self.file)
+                        self.instruments[index].synthesize(fs = 48000, track = i)
+                        used.append(index)
 
             for pos, i in enumerate(used):
                 if not pos: self.sound = self.instruments[i].sound.copy()

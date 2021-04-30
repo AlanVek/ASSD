@@ -25,3 +25,5 @@ class TrackInfo(QWidget, Ui_Form):
         self.Track_Label.deleteLater()
         self.Instrument_Options.deleteLater()
         self.Full_Frame.deleteLater()
+
+    def isChecked(self): return self.Track_Label.isChecked()

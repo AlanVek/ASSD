@@ -17,13 +17,10 @@
    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
     <widget class="QFrame" name="Full_Frame">
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLabel" name="Track_Label">
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QCheckBox" name="Track_Label">
         <property name="text">
-         <string>TextLabel</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <string>CheckBox</string>
         </property>
        </widget>
       </item>
