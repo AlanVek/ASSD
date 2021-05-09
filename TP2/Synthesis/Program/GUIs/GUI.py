@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QProgressBar
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QProgressBar, QSpinBox, QHBoxLayout, QLabel
 from GUIs.Player_GUI.Player import Player
 from GUIs.GUI_QT import Ui_Form
 from File.File import open_file
@@ -9,7 +9,6 @@ import numpy as np
 from threading import Thread
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
-
 
 class GUI(QWidget, Ui_Form):
 
@@ -28,12 +27,26 @@ class GUI(QWidget, Ui_Form):
         self.track_tracker : list[TrackInfo] = []
 
         self.newlay = QVBoxLayout()
+        self.tonelay = QHBoxLayout()
+
         self.player = Player(self.GUI_Frame)
         self.newlay.addWidget(self.player, 0, Qt.AlignHCenter)
 
         self.progress = QProgressBar(self.GUI_Frame)
-        self.newlay.addWidget(self.progress)
+        self.lowtone = QSpinBox(self.GUI_Frame)
+        self.toneLabel = QLabel(self.GUI_Frame)
+        self.toneLabel.setText('Low tone: ')
+
         self.progress.setValue(0)
+        self.lowtone.setMinimum(-2)
+        self.lowtone.setMaximum(2)
+        self.lowtone.setValue(0)
+
+        self.newlay.addWidget(self.progress)
+        self.tonelay.addWidget(self.toneLabel)
+        self.tonelay.addWidget(self.lowtone)
+
+        self.newlay.addLayout(self.tonelay)
 
         self.Buttons_Layout.addLayout(self.newlay)
         self.th = Thread(target = self._synth)
@@ -88,10 +101,10 @@ class GUI(QWidget, Ui_Form):
                     print(f'Synthesizing track {curr + 1} of {tot} with: {self.instrument_names[index]}')
 
                     if index in used:
-                        self.instruments[index].synthesize(fs = 48000, track = i, add = True)
+                        self.instruments[index].synthesize(fs = 48000, track = i, add = True, lowtone = self.lowtone.value())
                     else:
                         self.instruments[index].load(self.file)
-                        self.instruments[index].synthesize(fs = 48000, track = i)
+                        self.instruments[index].synthesize(fs = 48000, track = i, lowtone = self.lowtone.value())
                         used.append(index)
                     curr += 1
                     self.new_synth.emit(int(curr / tot * 100))
