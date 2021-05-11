@@ -9,11 +9,32 @@ import numpy as np
 from threading import Thread
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
+from Instruments.Sample_Based.Sample_Based_Synth import SampleBasedGuitar, SampleBasedPiano, SampleBasedBanjo, SampleBasedSaxophone, SampleBasedBassoon
 
 class GUI(QWidget, Ui_Form):
 
-    instrument_names = ['Guitar', 'Harp', 'Drum']
-    instruments = [Guitar(), Harp(), Drum()]
+    instrument_names = [
+        'Guitar',
+        'Harp',
+        'Drum',
+        'Acoustic Guitar',
+        'Piano',
+        'Banjo',
+        'Saxophone',
+        'Bassoon'
+    ]
+
+    instruments = [
+        Guitar(),
+        Harp(),
+        Drum(),
+        SampleBasedGuitar(),
+        SampleBasedPiano(),
+        SampleBasedBanjo(),
+        SampleBasedSaxophone(),
+        SampleBasedBassoon()
+    ]
+
     new_synth = pyqtSignal('int')
 
     def __init__(self, *args, **kwargs):
