@@ -10,6 +10,7 @@ from threading import Thread
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
 from Instruments.Sample_Based.Sample_Based_Synth import SampleBasedGuitar, SampleBasedPiano, SampleBasedBanjo, SampleBasedSaxophone, SampleBasedBassoon
+from scipy.io import wavfile
 
 class GUI(QWidget, Ui_Form):
 
@@ -145,6 +146,8 @@ class GUI(QWidget, Ui_Form):
 
             self.player.load(self.sound, 48000)
             print('Synthesized')
+
+            wavfile.write('Test.wav', 48000, (self.sound / np.abs(self.sound).max() * (2**16 - 1)).astype(np.int16))
 
             self.Synth_Button.setEnabled(True)
             self.File_Button.setEnabled(True)
