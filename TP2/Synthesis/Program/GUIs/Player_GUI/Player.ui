@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>344</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,6 +53,243 @@
             <string>00:00 / 00:00</string>
            </property>
           </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="echo_frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <layout class="QVBoxLayout" name="echo_layout">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QCheckBox" name="echo_check">
+           <property name="text">
+            <string>Echo</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="tau_layout">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="tau_label">
+             <property name="text">
+              <string>    𝜏    </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="tau_slider">
+             <property name="minimum">
+              <number>50</number>
+             </property>
+             <property name="maximum">
+              <number>130</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="t60_layout">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="t60_label">
+             <property name="text">
+              <string>  T60  </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="t60_slider">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>4</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="freeverb_frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <layout class="QVBoxLayout" name="freeverb_layout">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QCheckBox" name="freeverb_check">
+           <property name="text">
+            <string>Freeverb</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="d_layout">
+           <item>
+            <widget class="QLabel" name="d_label">
+             <property name="text">
+              <string>    d   </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="d_slider">
+             <property name="minimum">
+              <number>5</number>
+             </property>
+             <property name="maximum">
+              <number>50</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="N_layout">
+           <item>
+            <widget class="QLabel" name="N_label">
+             <property name="text">
+              <string>   N    </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="N_slider">
+             <property name="minimum">
+              <number>1000</number>
+             </property>
+             <property name="maximum">
+              <number>3000</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="f_layout">
+           <item>
+            <widget class="QLabel" name="f_label">
+             <property name="text">
+              <string>    f    </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="f_slider">
+             <property name="minimum">
+              <number>50</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="flanger_frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QCheckBox" name="flanger_check">
+           <property name="text">
+            <string>Flanger</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="delay_layout">
+           <item>
+            <widget class="QLabel" name="delay_label">
+             <property name="text">
+              <string> delay </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="delay_slider">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="range_layout">
+           <item>
+            <widget class="QLabel" name="range_label">
+             <property name="text">
+              <string> range</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="range_slider">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="sweep_layout">
+           <item>
+            <widget class="QLabel" name="sweep_label">
+             <property name="text">
+              <string>sweep</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="sweep_slider">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
