@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.signal import lfilter, lfilter_zi
 
-class efecto:
+class effect:
     def _init_(self):
         pass
 
@@ -63,7 +63,7 @@ class efecto:
 
         return y_filt/2
 
-    def effect_select(self, efect: dict):
+    def effect_select(self, efect : dict):
         # for key in efect.keys():
         #    if efect[key]: key()
         if 'echo' in efect: return self.echo(*efect['echo'])

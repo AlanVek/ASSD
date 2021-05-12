@@ -3,7 +3,7 @@ from threading import Thread
 import numpy as np
 from PyQt5.QtWidgets import QWidget, QStyle
 from GUIs.Player_GUI.Player_QT import Ui_Form
-from GUIs.Player_GUI.Effects import efecto
+from GUIs.Player_GUI.Effects import effect
 
 # echo: Recibe fs, tau < 1, t60, zi
 # freeverb: Recibe N, f < 1, d < 1, zi
@@ -46,7 +46,7 @@ class Player(QWidget, Ui_Form):
         self.Stop_Button.repaint()
 
         self.zi = None
-        self.effect_generator = efecto()
+        self.effect_generator = effect()
 
 
         self.flanger_check.clicked.connect(self.reset_zi)
@@ -64,7 +64,8 @@ class Player(QWidget, Ui_Form):
         self.Stop_Button.setEnabled(False)
         
         # Normaliza el sonido y actualiza los parámetros
-        self.sound = (data / np.abs(data).max()).astype(np.float32)
+        self.norm = np.abs(data).max()
+        self.sound = (data / self.norm).astype(np.float32)
         self.fs = fs
         self._close_stream()
         
