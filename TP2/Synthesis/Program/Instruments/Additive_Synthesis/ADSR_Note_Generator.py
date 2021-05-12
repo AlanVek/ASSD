@@ -1,14 +1,8 @@
 import numpy as np
-from scipy import signal
-import matplotlib.pyplot as plt
-from IPython.display import Audio
-from random import seed
-from random import randint
 
 
 def ADSR_Note_Generator(Amp: np.array, A: float,D: float,S: float,R: float,freq: float,dur: float,fs: float) -> np.array:
 
-    seed()
     # norm = 440/freq; #Esto tengo que ver cómo hago luego
     norm = 1;
 
@@ -37,7 +31,6 @@ def ADSR_Note_Generator(Amp: np.array, A: float,D: float,S: float,R: float,freq:
         else:  # Si no, elimino el decay y recorto el ataque directamente.
             D = 0
             S = 0
-            print("hey arnold")
             A = dur
             maxAttack = attackRate * dur;
             # releaseTime = (maxAttack)/releaseRate
@@ -47,8 +40,8 @@ def ADSR_Note_Generator(Amp: np.array, A: float,D: float,S: float,R: float,freq:
     else:
         sustain_time = dur - A - D  # El sustain time asumiendo que fuese ideal y no decae. Luego elegiré el mínimo entre los dos.
         alpha = S / max_sustain  # Fall rate del sustain. Puede ser que llegue a 0 antes del release, cuyo caso se contempla.
-        t = np.linspace(0, max_sustain, int(fs * (max_sustain)));  # Tiempo total
-        Sf = S - t * alpha  # Asumo que desciende linealmente el sustain. Con el dur*alpha el
+        ts = np.linspace(0, max_sustain, int(fs * (max_sustain)));  # Tiempo total
+        Sf = S - ts * alpha  # Asumo que desciende linealmente el sustain. Con el dur*alpha el
         index = Sf < S / 100
         minIndex = np.argmax(index)
         Sf[index] = 0
@@ -64,14 +57,12 @@ def ADSR_Note_Generator(Amp: np.array, A: float,D: float,S: float,R: float,freq:
         else:
             sustain = Sf[: minIndex];
             #releaseTime = Sf[-1] / releaseRate;
-            print(Sf[minIndex])
             # release = np.linspace(Sf[minIndex - 1], 0, int(releaseTime * fs));
             envelope = np.concatenate((attack, decay, sustain))  # Concateno las rectas de la envolvente.
 
     release = np.zeros(int(dur * fs))
-
-    for i in range(len(release)):
-        release[-(i + 1)] = (i * releaseRate) / fs;
+    idx = np.arange(release.size)
+    release[-1 - idx] = idx * releaseRate / fs
 
     t = np.linspace(0, dur, int(fs * dur));  # Tiempo total
     s = np.zeros(int(fs * dur));  # Creo arreglo para la señal que será mi nota de piano.
@@ -85,15 +76,13 @@ def ADSR_Note_Generator(Amp: np.array, A: float,D: float,S: float,R: float,freq:
     # print(Amp)
 
     for i in range(1, len(Amp) + 1):
-        s += Amp[i - 1] * np.sin(2 * np.pi * (freq) * i * t);
-        # + randint(0,1)
+        s += Amp[i - 1] * np.sin(2 * np.pi * (freq + np.random.randint(0, 5)) * i * t);
 
     if (s.size > envelope.size):
         envelope = np.append(envelope, np.zeros(s.size - envelope.size))
 
     envelope[envelope > release] = release[envelope > release]
 
-    maxs = np.max(s)
-    final_array = s / maxs * envelope  # [(s/((maxs))*envelope) for s,envelope in zip(s,envelope)]
+    final_array = s / np.abs(s).max() * envelope  # [(s/((maxs))*envelope) for s,envelope in zip(s,envelope)]
 
     return final_array

@@ -117,7 +117,7 @@ class Player(QWidget, Ui_Form):
                     data_play, self.zi = self.effect_generator.effect_select(parameters)
                     data_play = data_play.astype(np.float32)
 
-                    if np.any(data_play > 1):
+                    if np.any(np.abs(data_play) > 1):
                         data_play = (data_play / np.abs(data_play).max())
 
                 else:

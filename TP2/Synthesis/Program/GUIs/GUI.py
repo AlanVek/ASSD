@@ -11,6 +11,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
 from Instruments.Sample_Based.Sample_Based_Synth import SampleBasedGuitar, SampleBasedPiano, SampleBasedBanjo, SampleBasedSaxophone, SampleBasedBassoon
 from scipy.io import wavfile
+from Instruments.Additive_Synthesis.ADSR_Generator import Piano2
 
 class GUI(QWidget, Ui_Form):
 
@@ -22,7 +23,8 @@ class GUI(QWidget, Ui_Form):
         'Piano',
         'Banjo',
         'Saxophone',
-        'Bassoon'
+        'Bassoon',
+        'Piano2',
     ]
 
     instruments = [
@@ -30,10 +32,11 @@ class GUI(QWidget, Ui_Form):
         Harp(),
         Drum(),
         SampleBasedGuitar(),
-        SampleBasedPiano(),
+        Piano2(),
         SampleBasedBanjo(),
         SampleBasedSaxophone(),
-        SampleBasedBassoon()
+        SampleBasedBassoon(),
+        SampleBasedPiano(),
     ]
 
     new_synth = pyqtSignal('int')
