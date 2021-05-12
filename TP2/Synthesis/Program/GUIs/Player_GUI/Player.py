@@ -49,9 +49,20 @@ class Player(QWidget, Ui_Form):
         self.effect_generator = effect()
 
 
-        self.flanger_check.clicked.connect(self.reset_zi)
-        self.freeverb_check.clicked.connect(self.reset_zi)
-        self.echo_check.clicked.connect(self.reset_zi)
+        self.flanger_check.toggled.connect(self.reset_zi)
+        self.freeverb_check.toggled.connect(self.reset_zi)
+        self.echo_check.toggled.connect(self.reset_zi)
+
+        self.flanger_check.toggled.connect(self.freeverb_check.setDisabled)
+        self.flanger_check.toggled.connect(self.echo_check.setDisabled)
+
+        self.freeverb_check.toggled.connect(self.flanger_check.setDisabled)
+        self.freeverb_check.toggled.connect(self.echo_check.setDisabled)
+
+        self.echo_check.toggled.connect(self.freeverb_check.setDisabled)
+        self.echo_check.toggled.connect(self.flanger_check.setDisabled)
+        # self.flanger_check.setCheckState()
+
 
     def reset_zi(self, keep):
         if not keep: self.zi = None
