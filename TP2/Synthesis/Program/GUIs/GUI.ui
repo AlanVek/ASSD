@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>433</width>
     <height>300</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="Player" native="true">
+     <widget class="QWidget" name="Player">
       <attribute name="title">
        <string>Player</string>
       </attribute>
@@ -40,8 +40,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>271</width>
-            <height>252</height>
+            <width>286</width>
+            <height>236</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -52,34 +52,40 @@
          </widget>
         </widget>
        </item>
-       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+       <item alignment="Qt::AlignVCenter">
         <widget class="QFrame" name="GUI_Frame">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
          <layout class="QVBoxLayout" name="Buttons_Layout">
-          <item>
-           <widget class="QPushButton" name="File_Button">
-            <property name="text">
-             <string>New File</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="Synth_Button">
-            <property name="text">
-             <string>Synthesize</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="saveButton">
-            <property name="text">
-             <string>Save file</string>
-            </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QFrame" name="buttons_frame">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QPushButton" name="File_Button">
+               <property name="text">
+                <string>New File</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="Synth_Button">
+               <property name="text">
+                <string>Synthesize</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="saveButton">
+               <property name="text">
+                <string>Save file</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -127,96 +133,116 @@
            <number>0</number>
           </property>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Window</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="window_box">
-              <item>
+           <widget class="QFrame" name="">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label">
                <property name="text">
-                <string>Hanning</string>
+                <string>Window</string>
                </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Blackman-Harris</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Hann</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Triangular</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Blackman</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Hamming</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Bartlett</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="window_box">
+               <item>
+                <property name="text">
+                 <string>Hanning</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Blackman-Harris</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Hann</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Triangular</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Blackman</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Hamming</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Bartlett</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Min Time (s)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="min_time"/>
-            </item>
-           </layout>
+           <widget class="QFrame" name="">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Min Time (s)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="min_time"/>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Max Time (s)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="max_time"/>
-            </item>
-           </layout>
+           <widget class="QFrame" name="">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Max Time (s)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="max_time"/>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Overlap (%)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="overlap"/>
-            </item>
-           </layout>
+           <widget class="QFrame" name="">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Overlap (%)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="overlap"/>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="plot_button">

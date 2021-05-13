@@ -53,6 +53,9 @@ class GUI(QWidget, Ui_Form):
 
         self.File_Button.clicked.connect(self.get_file)
         self.Synth_Button.clicked.connect(self.synthesize)
+        self.plot_button.clicked.connect(self.plot_spect)
+        self.saveButton.clicked.connect(self.saveFile)
+
         self.Synth_Button.setEnabled(False)
         self.saveButton.setEnabled(False)
         self.file = self.filename = ''
@@ -75,8 +78,9 @@ class GUI(QWidget, Ui_Form):
         self.lowtone.setValue(0)
 
         self.newlay.addWidget(self.progress)
-        self.tonelay.addWidget(self.toneLabel)
-        self.tonelay.addWidget(self.lowtone)
+        self.tonelay.addWidget(self.toneLabel, 0, Qt.AlignHCenter)
+        self.tonelay.addWidget(self.lowtone, 0, Qt.AlignHCenter)
+        self.tonelay.setAlignment(Qt.AlignHCenter)
 
         self.newlay.addLayout(self.tonelay)
 
@@ -95,8 +99,7 @@ class GUI(QWidget, Ui_Form):
         self.Canvas.addWidget(self.Fcanvas)
         self.ax = self.figure.add_subplot(111)
 
-        self.plot_button.clicked.connect(self.plot_spect)
-        self.saveButton.clicked.connect(self.saveFile)
+
 
     def get_file(self):
         self.Synth_Button.setEnabled(False)
@@ -213,7 +216,7 @@ class GUI(QWidget, Ui_Form):
 
     def saveFile(self):
         filename = save_file()
-        if len(filename):
+        if len(filename) and self.sound.size:
             wavfile.write(filename, 48000, (self.sound / np.abs(self.sound).max() / 2 * (2**16 - 1)).astype(np.int16))
 
 
