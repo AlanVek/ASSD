@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>344</height>
+    <height>424</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,7 +75,7 @@
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="tau_label">
              <property name="text">
-              <string>    𝜏    </string>
+              <string>    Loop time    </string>
              </property>
             </widget>
            </item>
@@ -99,7 +99,7 @@
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="t60_label">
              <property name="text">
-              <string>  T60  </string>
+              <string>  Reverb time   </string>
              </property>
             </widget>
            </item>
@@ -130,7 +130,7 @@
          <item alignment="Qt::AlignHCenter">
           <widget class="QCheckBox" name="freeverb_check">
            <property name="text">
-            <string>Freeverb</string>
+            <string>Low-Pass Comb</string>
            </property>
           </widget>
          </item>
@@ -139,7 +139,7 @@
            <item>
             <widget class="QLabel" name="d_label">
              <property name="text">
-              <string>    d   </string>
+              <string>     Damping    </string>
              </property>
             </widget>
            </item>
@@ -163,7 +163,7 @@
            <item>
             <widget class="QLabel" name="N_label">
              <property name="text">
-              <string>   N    </string>
+              <string>       Delay       </string>
              </property>
             </widget>
            </item>
@@ -187,7 +187,7 @@
            <item>
             <widget class="QLabel" name="f_label">
              <property name="text">
-              <string>    f    </string>
+              <string>    Room size   </string>
              </property>
             </widget>
            </item>
@@ -224,7 +224,7 @@
            <item>
             <widget class="QLabel" name="delay_label">
              <property name="text">
-              <string> delay </string>
+              <string>    Fixed delay  </string>
              </property>
             </widget>
            </item>
@@ -248,7 +248,7 @@
            <item>
             <widget class="QLabel" name="range_label">
              <property name="text">
-              <string> range</string>
+              <string>    Modulation   </string>
              </property>
             </widget>
            </item>
@@ -272,7 +272,7 @@
            <item>
             <widget class="QLabel" name="sweep_label">
              <property name="text">
-              <string>sweep</string>
+              <string>     Freq delay  </string>
              </property>
             </widget>
            </item>

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(400, 344)
+        Form.resize(400, 424)
         self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.Full_Frame = QtWidgets.QFrame(Form)
@@ -178,16 +178,16 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.Time_Label.setText(_translate("Form", "00:00 / 00:00"))
         self.echo_check.setText(_translate("Form", "Echo"))
-        self.tau_label.setText(_translate("Form", "    𝜏    "))
-        self.t60_label.setText(_translate("Form", "  T60  "))
-        self.freeverb_check.setText(_translate("Form", "Freeverb"))
-        self.d_label.setText(_translate("Form", "    d   "))
-        self.N_label.setText(_translate("Form", "   N    "))
-        self.f_label.setText(_translate("Form", "    f    "))
+        self.tau_label.setText(_translate("Form", "    Loop time    "))
+        self.t60_label.setText(_translate("Form", "  Reverb time   "))
+        self.freeverb_check.setText(_translate("Form", "Low-Pass Comb"))
+        self.d_label.setText(_translate("Form", "     Damping    "))
+        self.N_label.setText(_translate("Form", "       Delay       "))
+        self.f_label.setText(_translate("Form", "    Room size   "))
         self.flanger_check.setText(_translate("Form", "Flanger"))
-        self.delay_label.setText(_translate("Form", " delay "))
-        self.range_label.setText(_translate("Form", " range"))
-        self.sweep_label.setText(_translate("Form", "sweep"))
+        self.delay_label.setText(_translate("Form", "    Fixed delay  "))
+        self.range_label.setText(_translate("Form", "    Modulation   "))
+        self.sweep_label.setText(_translate("Form", "     Freq delay  "))
 
 
 if __name__ == "__main__":
