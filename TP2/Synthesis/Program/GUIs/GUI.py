@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QProgressBar, QSpinBox, QHBoxLayout, QLabel
 from GUIs.Player_GUI.Player import Player
 from GUIs.GUI_QT import Ui_Form
-from File.File import open_file
+from File.File import open_file, save_file
 from mido import MidiFile
 from GUIs.TrackInfo.TrackInfo import TrackInfo
 from Instruments.Karplus_Strong.KSInstrument import Guitar, Drum, Harp
@@ -12,6 +12,12 @@ from PyQt5.QtCore import pyqtSignal
 from Instruments.Sample_Based.Sample_Based_Synth import SampleBasedGuitar, SampleBasedPiano, SampleBasedBanjo, SampleBasedSaxophone, SampleBasedBassoon
 from scipy.io import wavfile
 from Instruments.Additive_Synthesis.ADSR_Generator import Piano2
+import scipy.signal as ss
+
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib import mlab
 
 class GUI(QWidget, Ui_Form):
 
@@ -48,6 +54,7 @@ class GUI(QWidget, Ui_Form):
         self.File_Button.clicked.connect(self.get_file)
         self.Synth_Button.clicked.connect(self.synthesize)
         self.Synth_Button.setEnabled(False)
+        self.saveButton.setEnabled(False)
         self.file = self.filename = ''
         self.track_tracker : list[TrackInfo] = []
 
@@ -82,8 +89,18 @@ class GUI(QWidget, Ui_Form):
 
         self.new_synth.connect(self.progress.setValue)
 
+        self.figure = Figure(tight_layout=True)
+        self.Fcanvas = FigureCanvas(self.figure)
+        self.Canvas.addWidget(NavigationToolbar(self.Fcanvas, self), alignment=Qt.AlignHCenter)
+        self.Canvas.addWidget(self.Fcanvas)
+        self.ax = self.figure.add_subplot(111)
+
+        self.plot_button.clicked.connect(self.plot_spect)
+        self.saveButton.clicked.connect(self.saveFile)
+
     def get_file(self):
         self.Synth_Button.setEnabled(False)
+        self.saveButton.setEnabled(False)
         self.filename = open_file('mid', app = False)
         if not len(self.filename): return
 
@@ -100,6 +117,11 @@ class GUI(QWidget, Ui_Form):
             self.track_tracker.append(TrackInfo(i + 1, self.instrument_names))
             self.track_layout.addWidget(self.track_tracker[-1])
 
+        self.min_time.setMinimum(0)
+        self.min_time.setMaximum(self.file.length)
+        self.max_time.setMinimum(0)
+        self.max_time.setMaximum(self.file.length)
+
     def synthesize(self):
         if len(self.filename):
             if self.th.is_alive(): self.th.join()
@@ -107,6 +129,7 @@ class GUI(QWidget, Ui_Form):
             self.player.stop()
             self.player.Play_Button.setEnabled(False)
             self.Synth_Button.setEnabled(False)
+            self.saveButton.setEnabled(False)
             self.File_Button.setEnabled(False)
 
             self.th = Thread(target = self._synth)
@@ -150,10 +173,10 @@ class GUI(QWidget, Ui_Form):
             self.player.load(self.sound, 48000)
             print('Synthesized')
 
-            wavfile.write('Test.wav', 48000, (self.sound / np.abs(self.sound).max() * (2**16 - 1)).astype(np.int16))
 
             self.Synth_Button.setEnabled(True)
             self.File_Button.setEnabled(True)
+            self.saveButton.setEnabled(True)
 
     def keyPressEvent(self, a0) -> None:
         if a0.key() == Qt.Key_Escape: self.close()
@@ -164,5 +187,34 @@ class GUI(QWidget, Ui_Form):
         self.stop = True
         if self.th.is_alive(): self.th.join()
         return super().close()
+
+
+    def plot_spect(self):
+        self.ax.clear()
+        self.ax.set_xlabel('Time [s]')
+        self.ax.set_ylabel('Frequency [Hz]')
+
+
+        window_dict = {
+            'Hanning' : mlab.window_hanning,
+            'Blackman' : ss.get_window('blackman', 256),
+            'Blackman-Harris': ss.get_window('blackmanharris', 256),
+            'Hann' : ss.get_window('hann', 256),
+            'Hamming' : ss.get_window('hamming', 256),
+            'Bartlett' : ss.get_window('bartlett', 256),
+            'Triangular' : ss.get_window('triang', 256)
+        }
+
+        thisWindow = window_dict[self.window_box.currentText()]
+        mint, maxt = int(self.min_time.value() * 48e3), int(self.max_time.value() * 48e3)
+        if self.sound.size and mint < maxt:
+            self.ax.specgram(self.sound[mint : maxt], Fs = 48000, noverlap = int(256 * self.overlap.value()/100), window = thisWindow)
+            self.Fcanvas.draw()
+
+    def saveFile(self):
+        filename = save_file()
+        if len(filename):
+            wavfile.write(filename, 48000, (self.sound / np.abs(self.sound).max() / 2 * (2**16 - 1)).astype(np.int16))
+
 
 

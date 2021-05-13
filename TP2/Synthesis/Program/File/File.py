@@ -11,3 +11,6 @@ def open_file(ext = '*', app = True) -> str:
 	if app: _app.exit()
 
 	return res
+
+def save_file(ext = 'wav'):
+	return QFileDialog.getSaveFileName(filter=f'*.{ext}')[0]

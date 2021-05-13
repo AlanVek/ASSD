@@ -15,62 +15,222 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="Full_Layout">
-     <item>
-      <widget class="QScrollArea" name="scroller">
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
+    <widget class="QTabWidget" name="full_tab">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="Player" native="true">
+      <attribute name="title">
+       <string>Player</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="Full_Layout">
+       <item>
+        <widget class="QScrollArea" name="scroller">
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>271</width>
+            <height>252</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QVBoxLayout" name="track_layout"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QFrame" name="GUI_Frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <layout class="QVBoxLayout" name="Buttons_Layout">
+          <item>
+           <widget class="QPushButton" name="File_Button">
+            <property name="text">
+             <string>New File</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Synth_Button">
+            <property name="text">
+             <string>Synthesize</string>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveButton">
+            <property name="text">
+             <string>Save file</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Spectrogram">
+      <attribute name="title">
+       <string>Spectrogram</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>277</width>
-          <height>278</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <layout class="QVBoxLayout" name="track_layout"/>
-         </item>
+       <item>
+        <layout class="QVBoxLayout" name="Canvas">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMaximumSize</enum>
+         </property>
         </layout>
-       </widget>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-      <widget class="QFrame" name="GUI_Frame">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <layout class="QVBoxLayout" name="Buttons_Layout">
-        <item>
-         <widget class="QPushButton" name="File_Button">
-          <property name="text">
-           <string>New File</string>
+       </item>
+       <item alignment="Qt::AlignVCenter">
+        <widget class="QFrame" name="horizontalFrame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>4</number>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="Synth_Button">
-          <property name="text">
-           <string>Synthesize</string>
+          <property name="leftMargin">
+           <number>0</number>
           </property>
-          <property name="checkable">
-           <bool>false</bool>
+          <property name="topMargin">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Window</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="window_box">
+              <item>
+               <property name="text">
+                <string>Hanning</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Blackman-Harris</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hann</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Triangular</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Blackman</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hamming</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Bartlett</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Min Time (s)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="min_time"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Max Time (s)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="max_time"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Overlap (%)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="overlap"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="plot_button">
+            <property name="text">
+             <string>Plot</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
