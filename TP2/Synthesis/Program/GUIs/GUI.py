@@ -107,6 +107,7 @@ class GUI(QWidget, Ui_Form):
         self.filename = open_file('mid', app = False)
         if not len(self.filename): return
 
+
         self.Synth_Button.setEnabled(True)
         self.progress.setValue(0)
         for i, track in enumerate(self.track_tracker):
