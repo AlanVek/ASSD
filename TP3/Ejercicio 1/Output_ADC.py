@@ -10,8 +10,8 @@ data = data.replace('SHI', 1).replace('SLO', 0)
 
 data['dec'] = np.dot(data[data.columns[1:]], 2**np.arange(7, -1, -1))
 
-time_ms = data['TIME'] * 1000
-output = data['dec'] * Vref / 2.0**bits
+time_ms = data['TIME'].to_numpy() * 1000
+output = data['dec'].to_numpy() * Vref / 2.0**bits
 
 idx = 2
 plt.hlines(output[idx:-1], time_ms[idx:-1], time_ms[idx + 1:])
@@ -23,3 +23,5 @@ plt.grid()
 plt.tight_layout()
 
 plt.show()
+
+print(time_ms[idx:][100] - time_ms[idx:][99])
